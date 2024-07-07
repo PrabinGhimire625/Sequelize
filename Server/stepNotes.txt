@@ -1,0 +1,21 @@
+1. create the : 
+const[name, setName]=useState("")
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+
+2. <form onSubmit={handleSubmit}>
+
+3. const handleSubmit = (e) => {
+    e.preventDefault(); // Prevents the default form submission
+    axios
+      .post("http://localhost:3000/login", { email, password })
+      .then((res) => {
+        console.log("Response data:", res.data);
+        navigate("/home"); // Redirect to home
+      })
+      .catch((err) => console.log("Error:", err));
+  };
+
+4. onChange={(e) => setUsername(e.target.value)}
+
+5. 
