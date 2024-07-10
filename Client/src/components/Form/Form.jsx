@@ -6,34 +6,32 @@ import axios from "axios";
 import "../Form/Form.css";
 
 function Form({ type }) {
-//useState in React is used to manage state within functional components, allowing them to maintain and update their own data over time.
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // Error message state
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
 
     const url = type === "Signup" ? "http://localhost:3000/signup" : "http://localhost:3000/login";
     const data = type === "Signup" ? { userName, email, password } : { email, password };
-//api hit garna client (postman ko kam garxa)
+
     axios.post(url, data)
       .then((res) => {
         const msg = type === "Signup" ? "User successfully registered" : "Login successful!";
         alert(msg);
-        setErrorMessage(""); // Clear any previous error messages
-        navigate(type === "Signup" ? "/login" : "/home"); // Redirect based on form type
+        setErrorMessage("");
+        navigate(type === "Signup" ? "/login" : "/home");
       })
       .catch((err) => {
         console.error("Error:", err);
-        setErrorMessage("Email and password do not match!"); // Set error message
+        setErrorMessage("Email and password do not match!");
       });
   };
 
-  // Style for the login error message
-  const styles = {
+  const errorMessageStyle = {
     color: "red",
     marginLeft: "50px",
     marginTop: "10px"
@@ -45,7 +43,7 @@ function Form({ type }) {
         <form onSubmit={handleSubmit}>
           <h1>{type === "Signup" ? "Signup" : "Login"}</h1>
 
-          {type === "Signup" ? (
+          {type === "Signup" && (
             <div className="input-box">
               <input
                 type="text"
@@ -56,7 +54,7 @@ function Form({ type }) {
               />
               <FaUser className="icon" />
             </div>
-          ) : null}
+          )}
 
           <div className="input-box">
             <input
@@ -89,9 +87,8 @@ function Form({ type }) {
           </div>
 
           <button type="submit">{type === "Signup" ? "Signup" : "Login"}</button>
-           
-          {/* Error message when email and password do not match on login */}
-          {errorMessage ? <p className="error-message" style={styles}>{errorMessage}</p> : null}
+
+          {errorMessage && <p className="error-message" style={errorMessageStyle}>{errorMessage}</p>}
 
           <div className="register-link">
             {type === "Signup" ? (
