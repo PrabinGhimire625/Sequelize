@@ -23,7 +23,7 @@ function Form({ type }) {
         const msg = type === "Signup" ? "User successfully registered" : "Login successful!";
         alert(msg);
         setErrorMessage("");
-        navigate(type === "Signup" ? "/login" : "/home");
+        navigate(type === "Signup" ? "/login" : "/");
       })
       .catch((err) => {
         console.error("Error:", err);

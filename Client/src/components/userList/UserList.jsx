@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import EditForm from "../editForm/EditForm.jsx"; // Update the path as per your project structure
+import Navbar from "../Navbar/Navbar";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
-  const [editUserId, setEditUserId] = useState(null); // State to track which user to edit
-
   const fetchUsers = async () => {
     try {
       const response = await axios.get("http://localhost:3000/getAllUser");
@@ -19,21 +17,20 @@ const UserList = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+  console.log(users)
 
-  const handleDeleteUser = async (userId) => {
-    try {
-      await axios.delete(`http://localhost:3000/deleteUser/${userId}`);
-      setUsers(users.filter((user) => user.id !== userId));
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
-
-  const handleEditUser = (userId) => {
-    setEditUserId(userId); // Set the userId to trigger the EditForm component to render with the user's data
-  };
+  // const handleDeleteUser = async (userId) => {
+  //   try {
+  //     await axios.delete(`http://localhost:3000/deleteUser/${userId}`);
+  //     setUsers(users.filter((user) => user.id !== userId));
+  //   } catch (error) {
+  //     console.error("Error deleting user:", error);
+  //   }
+  // };
 
   return (
+    <>
+    <Navbar/>
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -66,29 +63,33 @@ const UserList = () => {
               </th>
               <td className="px-6 py-4">{user.email}</td>
               <td className="px-6 py-4">
-                <button
-                  className="font-medium text-red-600 dark:text-blue-500 hover:underline"
-                  onClick={() => handleEditUser(user.id)}
-                >
+              <Link to={`/editUser/${user.id}`} >
+              <button
+                  className="font-medium text-red-600 dark:text-blue-500 hover:underline">
                   Edit
                 </button>
+              </Link>
               </td>
               <td className="px-6 py-4">
                 <button
-                  onClick={() => handleDeleteUser(user.id)}
+                  // onClick={() => handleDeleteUser(user.id)}
                   className="font-medium text-red-600 dark:text-blue-500 hover:underline"
                 >
                   Delete
                 </button>
+                
+              </td>
+              <td className="px-6 py-4">
+                <Link to={`/viewUser/${user.id}`}>
+                  <button className="font-medium text-red-600 dark:text-blue-500 hover:underline">View</button>  
+                </Link>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {/* Render EditForm if editUserId is set */}
-      {editUserId && <EditForm userId={editUserId} />}
     </div>
+    </>
   );
 };
 

@@ -2,6 +2,8 @@ import User from "../model/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { jwtAuthMiddleware, generateToken } from "../jwt.js"; // Import jwtAuthMiddleware
+
 
 dotenv.config();
 
@@ -24,14 +26,14 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).send("Invalid credentials");
     }
-
-    // Generate a JWT token
-    const token = jwt.sign({ id: user.id, email: user.email }, jwtSecret, {
-      expiresIn: "1h",
-    });
-
-    res.status(200).json({ token });
-    console.log("Login successfully!");
+     //generate token
+     const payload = {
+      id: User.id,
+      username: User.username,
+    };
+    const token = generateToken(payload);
+    res.json({ token });
+    
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).send("Error logging in");
